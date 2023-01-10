@@ -24,6 +24,28 @@ public extension String {
         return String(repeatElement(character, count: length - stringLength)) + self
     }
     
+    /// - returns: A version of this string with the length `length`. If this string is longer than `length`, removes characters from the left.
+    ///            If it is shorter, adds the padding character to the right.
+    func rightPadding(toExactLength length: Int, withPad character: Character) -> String {
+        let stringLength = self.count
+        if stringLength < length {
+            return self + String(repeatElement(character, count: length - stringLength))
+        }
+        
+        return String(self.prefix(length))
+    }
+    
+    /// - returns: A version of this string with the length `length`. If this string is longer than `length`, nothing is changed.
+    ///            If it is shorter, adds the padding character to the right.
+    func rightPadding(toMinimumLength length: Int, withPad character: Character) -> String {
+        let stringLength = self.count
+        guard stringLength < length else {
+            return self
+        }
+        
+        return self + String(repeatElement(character, count: length - stringLength))
+    }
+    
     /// - returns: A version of this string without the given prefix, if it exists.
     func deletingPrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
