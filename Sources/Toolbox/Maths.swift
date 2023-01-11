@@ -55,6 +55,46 @@ public func **(radix: Decimal, power: Int) -> Decimal {
     return result
 }
 
+// MARK: Factorial
+
+public extension MathsToolbox {
+    /// - returns: The factorial of `n`, i.e. the result of n×(n-1)×...×1
+    static func factorial(_ n: Int) -> Int {
+        if n < 3 {
+            return max(1, n)
+        }
+        
+        // Use a lookup table for small numbers
+        switch n {
+        case 3:
+            return 6
+        case 4:
+            return 24
+        case 5:
+            return 120
+        case 6:
+            return 720
+        case 7:
+            return 5040
+        case 8:
+            return 40320
+        case 9:
+            return 362_880
+        case 10:
+            return 3_628_800
+        default:
+            break
+        }
+        
+        var result = 3_628_800
+        for i in 11...n {
+            result *= i
+        }
+        
+        return result
+    }
+}
+
 // MARK: Digit counting
 
 public extension MathsToolbox {
