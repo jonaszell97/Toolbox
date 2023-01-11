@@ -28,10 +28,9 @@ public extension Date {
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: This date converted to a different time zone.
-    func convertToTimeZone(initTimeZone: TimeZone = .init(secondsFromGMT: 0)!, timeZone: TimeZone) -> Date {
-        let delta = TimeInterval(timeZone.secondsFromGMT(for: self) - initTimeZone.secondsFromGMT(for: self))
-        return addingTimeInterval(delta)
+    /// - returns: A date representing the end of the day this date is in.
+    var endOfDay: Date {
+        startOfDay.addingTimeInterval(23*60*60 + 59*60 + 59)
     }
     
     /// - returns: A date representing the start of the month this date is in.
@@ -42,7 +41,7 @@ public extension Date {
     
     /// - returns: A date representing the end of the month this date is in.
     var endOfMonth: Date {
-        Calendar.reference.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth)!
+        Calendar.reference.date(byAdding: DateComponents(month: 1, second: -1), to: self.startOfMonth)!
     }
     
     enum FirstDayOfWeek {
@@ -68,6 +67,12 @@ public extension Date {
     /// - returns: A date representing the end of the week this date is in.
     func endOfWeek(weekStartsOn firstWeekday: FirstDayOfWeek) -> Date {
         startOfWeek(weekStartsOn: firstWeekday).addingTimeInterval(7*24*60*60 - 1)
+    }
+    
+    /// - returns: This date converted to a different time zone.
+    func convertToTimeZone(initTimeZone: TimeZone = .init(secondsFromGMT: 0)!, timeZone: TimeZone) -> Date {
+        let delta = TimeInterval(timeZone.secondsFromGMT(for: self) - initTimeZone.secondsFromGMT(for: self))
+        return addingTimeInterval(delta)
     }
 }
 
