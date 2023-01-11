@@ -45,10 +45,29 @@ public extension Date {
         Calendar.reference.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth)!
     }
     
+    enum FirstDayOfWeek {
+        case sunday, monday
+    }
+    
     /// - returns: A date representing the start of the week this date is in.
-    var startOfWeek: Date {
-        let components = Calendar.reference.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
-        return Calendar.reference.date(from: components)!
+    func startOfWeek(weekStartsOn firstWeekday: FirstDayOfWeek) -> Date {
+        let components = Calendar.reference.dateComponents([.year, .month, .day, .weekday], from: self)
+        let desiredWeekday: Int
+        
+        switch firstWeekday {
+        case .sunday:
+            desiredWeekday = 1
+        case .monday:
+            desiredWeekday = 2
+        }
+        
+        let difference = desiredWeekday - components.weekday!
+        return Calendar.reference.date(from: components)!.addingTimeInterval(24*60*60*TimeInterval(difference))
+    }
+    
+    /// - returns: A date representing the end of the week this date is in.
+    func endOfWeek(weekStartsOn firstWeekday: FirstDayOfWeek) -> Date {
+        startOfWeek(weekStartsOn: firstWeekday).addingTimeInterval(7*24*60*60 - 1)
     }
 }
 

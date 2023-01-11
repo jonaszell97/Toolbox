@@ -175,6 +175,114 @@ final class ToolboxTests: XCTestCase {
         }
     }
     
+    func testStartOfWeekMonday() {
+        let dates = [
+            "2023-01-09T00:00:00+0000",
+            "2023-01-10T13:15:23+0000",
+            "2023-01-11T00:00:00+0000",
+        ]
+        
+        let expected = [
+            "2023-01-09T00:00:00+0000",
+            "2023-01-09T00:00:00+0000",
+            "2023-01-09T00:00:00+0000",
+        ]
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.timeZone = .utc
+        
+        var i = 0
+        for dateStr in dates {
+            let date = dateFormatter.date(from: dateStr)!
+            XCTAssertEqual(expected[i], dateFormatter.string(from: date.startOfWeek(weekStartsOn: .monday)))
+            
+            i += 1
+        }
+    }
+    
+    func testEndOfWeekMonday() {
+        let dates = [
+            "2023-01-09T00:00:00+0000",
+            "2023-01-10T13:15:23+0000",
+            "2023-01-11T00:00:00+0000",
+        ]
+        
+        let expected = [
+            "2023-01-15T23:59:59+0000",
+            "2023-01-15T23:59:59+0000",
+            "2023-01-15T23:59:59+0000",
+        ]
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.timeZone = .utc
+        
+        var i = 0
+        for dateStr in dates {
+            let date = dateFormatter.date(from: dateStr)!
+            XCTAssertEqual(expected[i], dateFormatter.string(from: date.endOfWeek(weekStartsOn: .monday)))
+            
+            i += 1
+        }
+    }
+    
+    func testStartOfWeekSunday() {
+        let dates = [
+            "2023-01-09T00:00:00+0000",
+            "2023-01-10T13:15:23+0000",
+            "2023-01-11T00:00:00+0000",
+        ]
+        
+        let expected = [
+            "2023-01-08T00:00:00+0000",
+            "2023-01-08T00:00:00+0000",
+            "2023-01-08T00:00:00+0000",
+        ]
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.timeZone = .utc
+        
+        var i = 0
+        for dateStr in dates {
+            let date = dateFormatter.date(from: dateStr)!
+            XCTAssertEqual(expected[i], dateFormatter.string(from: date.startOfWeek(weekStartsOn: .sunday)))
+            
+            i += 1
+        }
+    }
+
+    func testEndOfWeekSunday() {
+        let dates = [
+            "2023-01-09T00:00:00+0000",
+            "2023-01-10T13:15:23+0000",
+            "2023-01-11T00:00:00+0000",
+        ]
+        
+        let expected = [
+            "2023-01-14T23:59:59+0000",
+            "2023-01-14T23:59:59+0000",
+            "2023-01-14T23:59:59+0000",
+        ]
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.timeZone = .utc
+        
+        var i = 0
+        for dateStr in dates {
+            let date = dateFormatter.date(from: dateStr)!
+            XCTAssertEqual(expected[i], dateFormatter.string(from: date.endOfWeek(weekStartsOn: .sunday)))
+            
+            i += 1
+        }
+    }
+    
     func testMean() {
         let tests: [([Float], [Float], [Float])] = [
             ([1, 2, 3], [5, 6, 7], [6/3, 11/4, 17/5, 24/6]),
