@@ -278,41 +278,32 @@ final class ToolboxTests: XCTestCase {
         XCTAssertEqual(dict["D"], [6, 7, 8, 9])
     }
     
-    func testRoundToMultipleInt() {
-        XCTAssertEqual(5, 5.roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(5, 3.roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(5, 1.roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(5, 6.roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(5, 9.roundedDown(toMultipleOf: 5))
+    func testArrayExtensions() {
+        // Unique
+        XCTAssertEqual([1, 2, 2, 3, 4, 4, 5].unique, [1, 2, 3, 4, 5])
+        XCTAssertEqual([2, 3, 2, 5, 6, 1, 6].unique, [2, 3, 5, 6, 1])
+        XCTAssertEqual([1, 1, 1, 1, 1, 1, 1].unique, [1])
         
-        XCTAssertEqual(0, 0.roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(0, 0.roundedDown(toMultipleOf: 12134))
-        XCTAssertEqual(0, 0.roundedUp(toMultipleOf: 21893))
-        
-        XCTAssertEqual(56, 54.roundedUp(toMultipleOf: 7))
-        XCTAssertEqual(56, 60.roundedDown(toMultipleOf: 7))
-        
-        XCTAssertEqual(-5, (-1).roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(-25, (-27).roundedUp(toMultipleOf: 5))
+        // Chunked
+        XCTAssertEqual([1, 2, 3, 4, 5, 6]   .chunked(into: 2              ), [[1, 2], [3, 4], [5, 6]])
+        XCTAssertEqual([1, 2, 3, 4, 5, 6, 7].chunked(into: 2              ), [[1, 2], [3, 4], [5, 6], [7]])
+        XCTAssertEqual([1, 2, 3, 4, 5, 6, 7].chunked(into: 2, padWith: 999), [[1, 2], [3, 4], [5, 6], [7, 999]])
     }
     
-    func testRoundToMultipleDouble() {
-        XCTAssertEqual(5.0, (4.7).roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(5.0, 3.roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(5.0, 1.roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(5.0, (6.125).roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(5.0, 9.roundedDown(toMultipleOf: 5))
+    func testStringExtensions() {
+        // Leftpad
+        XCTAssertEqual("hello".leftPadding(toExactLength: 10, withPad: " "), "     hello")
+        XCTAssertEqual("   hello".leftPadding(toExactLength: 10, withPad: "X"), "XX   hello")
         
-        XCTAssertEqual(0.0, 0.roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(0.0, 0.roundedDown(toMultipleOf: 12134))
-        XCTAssertEqual(0.0, 0.roundedUp(toMultipleOf: 21893))
+        XCTAssertEqual("hello".leftPadding(toExactLength: 3, withPad: " "), "llo")
+        XCTAssertEqual("hello".leftPadding(toMinimumLength: 3, withPad: " "), "hello")
         
-        XCTAssertEqual(56.0, (55.9).roundedUp(toMultipleOf: 7))
-        XCTAssertEqual(56.0, 60.roundedDown(toMultipleOf: 7))
+        // Rightpad
+        XCTAssertEqual("hello".rightPadding(toExactLength: 10, withPad: " "), "hello     ")
+        XCTAssertEqual("   hello".rightPadding(toExactLength: 10, withPad: "X"), "   helloXX")
         
-        XCTAssertEqual(-5.0, (-1.5).roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(-5.0, (-4.99).roundedDown(toMultipleOf: 5))
-        XCTAssertEqual(-25.0, (-27).roundedUp(toMultipleOf: 5))
-        XCTAssertEqual(-25.0, (-25.001).roundedUp(toMultipleOf: 5))
+        XCTAssertEqual("hello".rightPadding(toExactLength: 3, withPad: " "), "hel")
+        XCTAssertEqual("hello".rightPadding(toMinimumLength: 3, withPad: " "), "hello")
+        XCTAssertEqual("hello".rightPadding(toMinimumLength: 7, withPad: " "), "hello  ")
     }
 }
