@@ -60,7 +60,16 @@ public extension Date {
             desiredWeekday = 2
         }
         
-        let difference = desiredWeekday - components.weekday!
+        let weekday = components.weekday!
+        let difference: Int
+        
+        if desiredWeekday > weekday {
+            difference = -7 + (desiredWeekday - weekday)
+        }
+        else {
+            difference = desiredWeekday - weekday
+        }
+        
         return Calendar.reference.date(from: components)!.addingTimeInterval(24*60*60*TimeInterval(difference))
     }
     
