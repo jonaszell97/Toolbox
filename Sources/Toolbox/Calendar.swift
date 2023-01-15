@@ -109,10 +109,15 @@ public extension DateInterval {
     /// Expand this interval to contain the given date.
     mutating func expand(toContain date: Date) {
         if date.timeIntervalSinceReferenceDate < self.start.timeIntervalSinceReferenceDate {
-            self.start = date
+            self = .init(start: date, end: self.end)
         }
         else if date.timeIntervalSinceReferenceDate > self.end.timeIntervalSinceReferenceDate {
-            self.end = date
+            self = .init(start: self.start, end: date)
         }
+    }
+    
+    /// - returns: True if any date in `ìnterval` is included within this interval.
+    func overlaps(_ interval: DateInterval) -> Bool {
+        (interval.start >= self.start && interval.start <= self.end) || (interval.end <= self.end && interval.end >= self.start)
     }
 }

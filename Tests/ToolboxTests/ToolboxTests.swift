@@ -88,6 +88,24 @@ final class ToolboxTests: XCTestCase {
         XCTAssertLessThan(VersionTriple(major: 1, minor: 0, patch: 0), VersionTriple(major: 1, minor: 0, patch: 1)) // 1.0.0 < 1.0.1
     }
     
+    // MARK: Date manipulation
+    
+    let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.timeZone = .utc
+        
+        return dateFormatter
+    }()
+    
+    func date(from string: String) -> Date {
+        let date = dateFormatter.date(from: string)
+        XCTAssertNotNil(date)
+        
+        return date!
+    }
+    
     func testStartOfDay() {
         let calendar = Calendar.reference
         let startComponents = DateComponents(timeZone: .current, year: 2020, month: 1, day: 1, hour: 12, minute: 0, second: 0)
@@ -214,11 +232,6 @@ final class ToolboxTests: XCTestCase {
             "2023-06-01T00:00:00+0000",
         ]
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
-        
         var i = 0
         for dateStr in dates {
             let date = dateFormatter.date(from: dateStr)!
@@ -250,11 +263,6 @@ final class ToolboxTests: XCTestCase {
             "2021-11-30T23:59:59+0000",
             "2023-06-30T23:59:59+0000",
         ]
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
         
         var i = 0
         for dateStr in dates {
@@ -294,11 +302,6 @@ final class ToolboxTests: XCTestCase {
             "2023-01-02T00:00:00+0000",
         ]
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
-        
         var i = 0
         for dateStr in dates {
             let date = dateFormatter.date(from: dateStr)!
@@ -336,11 +339,6 @@ final class ToolboxTests: XCTestCase {
             "2023-01-08T23:59:59+0000",
             "2023-01-08T23:59:59+0000",
         ]
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
         
         var i = 0
         for dateStr in dates {
@@ -380,11 +378,6 @@ final class ToolboxTests: XCTestCase {
             "2023-01-01T00:00:00+0000",
         ]
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
-        
         var i = 0
         for dateStr in dates {
             let date = dateFormatter.date(from: dateStr)!
@@ -423,11 +416,6 @@ final class ToolboxTests: XCTestCase {
             "2023-01-07T23:59:59+0000",
         ]
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
-        
         var i = 0
         for dateStr in dates {
             let date = dateFormatter.date(from: dateStr)!
@@ -436,6 +424,61 @@ final class ToolboxTests: XCTestCase {
             i += 1
         }
     }
+    
+    func testDateIntervalExpanded() {
+        let interval = DateInterval(start: self.date(from: "2023-01-01T00:00:00+0000"),
+                                    end:   self.date(from: "2023-01-10T00:00:00+0000"))
+        
+        XCTAssertEqual(interval, interval.expanding(toContain: self.date(from: "2023-01-05T00:00:00+0000")))
+        XCTAssertEqual(interval, interval.expanding(toContain: self.date(from: "2023-01-01T13:22:00+0000")))
+        
+        XCTAssertEqual(DateInterval(start: self.date(from: "2023-01-01T00:00:00+0000"),
+                                    end:   self.date(from: "2023-01-11T00:00:00+0000")),
+                       interval.expanding(toContain: self.date(from: "2023-01-11T00:00:00+0000")))
+        
+        XCTAssertEqual(DateInterval(start: self.date(from: "2018-01-01T00:00:00+0000"),
+                                    end:   self.date(from: "2023-01-10T00:00:00+0000")),
+                       interval.expanding(toContain: self.date(from: "2018-01-01T00:00:00+0000")))
+    }
+    
+    func testDateIntervalOverlaps() {
+        let interval = DateInterval(start: self.date(from: "2023-01-01T00:00:00+0000"),
+                                    end:   self.date(from: "2023-01-10T00:00:00+0000"))
+        
+        // Enclosed interval
+        XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2023-01-03T00:00:00+0000"),
+                                                 end:   self.date(from: "2023-01-8T00:00:00+0000"))))
+        
+        // Interval overlaps, ends later
+        XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2023-01-03T00:00:00+0000"),
+                                                 end:   self.date(from: "2025-02-12T00:00:00+0000"))))
+        
+        // Interval overlaps, starts earlier
+        XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2018-01-01T00:00:00+0000"),
+                                                 end:   self.date(from: "2023-01-10T00:00:00+0000"))))
+        XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2022-12-31T23:59:58+0000"),
+                                                 end:   self.date(from: "2023-01-01T00:00:01+0000"))))
+        
+        // Interval before
+        XCTAssertFalse(interval.overlaps(DateInterval(start: self.date(from: "2018-01-01T00:00:00+0000"),
+                                                      end:   self.date(from: "2018-10-10T00:00:00+0000"))))
+        XCTAssertFalse(interval.overlaps(DateInterval(start: self.date(from: "2022-12-31T23:59:58+0000"),
+                                                      end:   self.date(from: "2022-12-31T23:59:59+0000"))))
+        
+        // Interval after
+        XCTAssertFalse(interval.overlaps(DateInterval(start: self.date(from: "2023-01-11T00:00:00+0000"),
+                                                      end:   self.date(from: "2023-01-15T00:00:00+0000"))))
+        XCTAssertFalse(interval.overlaps(DateInterval(start: self.date(from: "2023-01-10T00:00:01+0000"),
+                                                      end:   self.date(from: "2024-01-15T23:59:59+0000"))))
+        
+        // 0-duration interval
+        XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2023-01-01T00:00:00+0000"),
+                                                 end:   self.date(from: "2023-01-01T00:00:00+0000"))))
+        XCTAssertFalse(interval.overlaps(DateInterval(start: self.date(from: "2015-01-01T00:00:00+0000"),
+                                                      end:   self.date(from: "2015-01-01T00:00:00+0000"))))
+    }
+    
+    // MARK: Collections
     
     func testMean() {
         let tests: [([Float], [Float], [Float])] = [
