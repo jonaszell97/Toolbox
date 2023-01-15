@@ -273,6 +273,70 @@ final class ToolboxTests: XCTestCase {
         }
     }
     
+    func testStartOfYear() {
+        let dates = [
+            "2021-02-28T00:00:00+0000",
+            "2021-02-28T10:00:00+0000",
+            "2021-02-01T18:59:59+0000",
+            "2021-12-31T23:59:59+0000",
+            
+            "2021-10-31T19:01:00+0000",
+            "2003-11-30T23:59:59+0000",
+            "2023-06-15T16:02:04+0000",
+        ]
+        
+        let expected = [
+            "2021-01-01T00:00:00+0000",
+            "2021-01-01T00:00:00+0000",
+            "2021-01-01T00:00:00+0000",
+            "2021-01-01T00:00:00+0000",
+            
+            "2021-01-01T00:00:00+0000",
+            "2003-01-01T00:00:00+0000",
+            "2023-01-01T00:00:00+0000",
+        ]
+        
+        var i = 0
+        for dateStr in dates {
+            let date = dateFormatter.date(from: dateStr)!
+            XCTAssertEqual(expected[i], dateFormatter.string(from: date.startOfYear))
+            
+            i += 1
+        }
+    }
+    
+    func testEndOfYear() {
+        let dates = [
+            "2021-02-28T00:00:00+0000",
+            "2021-02-28T10:00:00+0000",
+            "2021-02-01T18:59:59+0000",
+            "2021-12-31T23:59:59+0000",
+            
+            "2021-10-31T19:01:00+0000",
+            "2003-11-30T23:59:59+0000",
+            "2023-06-15T16:02:04+0000",
+        ]
+        
+        let expected = [
+            "2021-12-31T23:59:59+0000",
+            "2021-12-31T23:59:59+0000",
+            "2021-12-31T23:59:59+0000",
+            "2021-12-31T23:59:59+0000",
+            
+            "2021-12-31T23:59:59+0000",
+            "2003-12-31T23:59:59+0000",
+            "2023-12-31T23:59:59+0000",
+        ]
+        
+        var i = 0
+        for dateStr in dates {
+            let date = dateFormatter.date(from: dateStr)!
+            XCTAssertEqual(expected[i], dateFormatter.string(from: date.endOfYear))
+            
+            i += 1
+        }
+    }
+    
     func testStartOfWeekMonday() {
         let dates = [
             "2023-01-09T00:00:00+0000",

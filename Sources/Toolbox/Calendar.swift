@@ -78,6 +78,27 @@ public extension Date {
         startOfWeek(weekStartsOn: firstWeekday).addingTimeInterval(7*24*60*60 - 1)
     }
     
+    /// - returns: A date representing the start of the year this date is in.
+    var startOfYear: Date {
+        var components = Calendar.reference.dateComponents([.year], from: self)
+        components.day = 1
+        components.month = 1
+        
+        return Calendar.reference.date(from: components)!
+    }
+    
+    /// - returns: A date representing the end of the year this date is in.
+    var endOfYear: Date {
+        var components = Calendar.reference.dateComponents([.year], from: self)
+        components.day = 31
+        components.month = 12
+        components.hour = 23
+        components.minute = 59
+        components.second = 59
+        
+        return Calendar.reference.date(from: components)!
+    }
+    
     /// - returns: This date converted to a different time zone.
     func convertToTimeZone(initTimeZone: TimeZone = .init(secondsFromGMT: 0)!, timeZone: TimeZone) -> Date {
         let delta = TimeInterval(timeZone.secondsFromGMT(for: self) - initTimeZone.secondsFromGMT(for: self))
