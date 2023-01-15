@@ -449,6 +449,10 @@ final class ToolboxTests: XCTestCase {
         XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2023-01-03T00:00:00+0000"),
                                                  end:   self.date(from: "2023-01-8T00:00:00+0000"))))
         
+        // Surrounding interval
+        XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2022-12-31T00:00:00+0000"),
+                                                 end:   self.date(from: "2023-01-11T00:00:00+0000"))))
+        
         // Interval overlaps, ends later
         XCTAssert(interval.overlaps(DateInterval(start: self.date(from: "2023-01-03T00:00:00+0000"),
                                                  end:   self.date(from: "2025-02-12T00:00:00+0000"))))

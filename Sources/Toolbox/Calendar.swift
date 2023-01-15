@@ -118,6 +118,8 @@ public extension DateInterval {
     
     /// - returns: True if any date in `ìnterval` is included within this interval.
     func overlaps(_ interval: DateInterval) -> Bool {
-        (interval.start >= self.start && interval.start <= self.end) || (interval.end <= self.end && interval.end >= self.start)
+        (interval.start >= self.start && interval.start <= self.end)
+            || (interval.end <= self.end && interval.end >= self.start)
+            || (interval.start <= self.start && interval.end >= self.end)
     }
 }
