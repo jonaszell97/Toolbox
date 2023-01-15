@@ -593,6 +593,31 @@ final class ToolboxTests: XCTestCase {
         XCTAssertEqual([1, 2, 3, 4, 5, 6]   .chunked(into: 2              ), [[1, 2], [3, 4], [5, 6]])
         XCTAssertEqual([1, 2, 3, 4, 5, 6, 7].chunked(into: 2              ), [[1, 2], [3, 4], [5, 6], [7]])
         XCTAssertEqual([1, 2, 3, 4, 5, 6, 7].chunked(into: 2, padWith: 999), [[1, 2], [3, 4], [5, 6], [7, 999]])
+        
+        // isSortedInIncreasingOrder
+        XCTAssert([1,2,3].isSortedInIncreasingOrder())
+        XCTAssert([1,2,2].isSortedInIncreasingOrder())
+        XCTAssert([-1,2,2].isSortedInIncreasingOrder())
+        XCTAssert([5,10,1828].isSortedInIncreasingOrder())
+        XCTAssert([5].isSortedInIncreasingOrder())
+        XCTAssert([Int]().isSortedInIncreasingOrder())
+        XCTAssertFalse([3,1,2,3].isSortedInIncreasingOrder())
+        XCTAssertFalse([1,3,2].isSortedInIncreasingOrder())
+        XCTAssertFalse([-1,3,2].isSortedInIncreasingOrder())
+        
+        // isSortedInDecreasingOrder
+        XCTAssertFalse([1,2,3].isSortedInDecreasingOrder())
+        XCTAssertFalse([1,2,2].isSortedInDecreasingOrder())
+        XCTAssertFalse([-1,2,2].isSortedInDecreasingOrder())
+        XCTAssertFalse([5,10,1828].isSortedInDecreasingOrder())
+        XCTAssert([5].isSortedInDecreasingOrder())
+        XCTAssert([Int]().isSortedInDecreasingOrder())
+        XCTAssertFalse([3,1,2,3].isSortedInDecreasingOrder())
+        XCTAssertFalse([1,3,2].isSortedInDecreasingOrder())
+        XCTAssertFalse([-1,3,2].isSortedInDecreasingOrder())
+        XCTAssert([3,2,1].isSortedInDecreasingOrder())
+        XCTAssert([3,2,2].isSortedInDecreasingOrder())
+        XCTAssert([3,2,2,-10].isSortedInDecreasingOrder())
     }
     
     func testStringExtensions() {
