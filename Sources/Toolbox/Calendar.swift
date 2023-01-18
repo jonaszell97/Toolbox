@@ -33,17 +33,6 @@ public extension Date {
         startOfDay.addingTimeInterval(23*60*60 + 59*60 + 59)
     }
     
-    /// - returns: A date representing the start of the month this date is in.
-    var startOfMonth: Date {
-        let components = Calendar.reference.dateComponents([.year, .month], from: self)
-        return Calendar.reference.date(from: components)!
-    }
-    
-    /// - returns: A date representing the end of the month this date is in.
-    var endOfMonth: Date {
-        Calendar.reference.date(byAdding: DateComponents(month: 1, second: -1), to: self.startOfMonth)!
-    }
-    
     enum FirstDayOfWeek {
         case sunday, monday
     }
@@ -76,6 +65,61 @@ public extension Date {
     /// - returns: A date representing the end of the week this date is in.
     func endOfWeek(weekStartsOn firstWeekday: FirstDayOfWeek) -> Date {
         startOfWeek(weekStartsOn: firstWeekday).addingTimeInterval(7*24*60*60 - 1)
+    }
+    
+    /// - returns: A date representing the start of the month this date is in.
+    var startOfMonth: Date {
+        let components = Calendar.reference.dateComponents([.year, .month], from: self)
+        return Calendar.reference.date(from: components)!
+    }
+    
+    /// - returns: A date representing the end of the month this date is in.
+    var endOfMonth: Date {
+        Calendar.reference.date(byAdding: DateComponents(month: 1, second: -1), to: self.startOfMonth)!
+    }
+    
+    /// - returns: A date representing the start of the quarter this date is in.
+    var startOfQuarter: Date {
+        var components = Calendar.reference.dateComponents([.year, .month], from: self)
+        switch components.month! {
+        case 1...3:
+            components.month = 1
+        case 4...6:
+            components.month = 4
+        case 7...9:
+            components.month = 7
+        case 10...12:
+            components.month = 10
+        default:
+            fatalError("invalid month")
+        }
+        
+        return Calendar.reference.date(from: components)!
+    }
+    
+    /// - returns: A date representing the end of the month this date is in.
+    var endOfQuarter: Date {
+        Calendar.reference.date(byAdding: DateComponents(month: 3, second: -1), to: self.startOfQuarter)!
+    }
+    
+    /// - returns: A date representing the start of the half of the year this date is in.
+    var startOfYearHalf: Date {
+        var components = Calendar.reference.dateComponents([.year, .month], from: self)
+        switch components.month! {
+        case 1...6:
+            components.month = 1
+        case 7...12:
+            components.month = 7
+        default:
+            fatalError("invalid month")
+        }
+        
+        return Calendar.reference.date(from: components)!
+    }
+    
+    /// - returns: A date representing the end of the half of the year this date is in.
+    var endOfYearHalf: Date {
+        Calendar.reference.date(byAdding: DateComponents(month: 6, second: -1), to: self.startOfYearHalf)!
     }
     
     /// - returns: A date representing the start of the year this date is in.
