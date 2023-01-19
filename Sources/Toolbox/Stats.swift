@@ -29,6 +29,18 @@ public extension StatsUtilities {
         
         return { x in intercept + slope * x }
     }
+    
+    /// - returns: The value of a normal distribution with the average value `mean` and standard deviation `std` at point `x`.
+    static func normalDistribution(_ x: Double, mean: Double, std: Double) -> Double {
+        let f1 = 1.0/(std*sqrt(2*Double.pi))
+        let ex = -0.5 * pow((x - mean) / std, 2)
+        return f1 * exp(ex)
+    }
+    
+    /// - returns: The value of the cumulative distribution function of a normal distribution with the average value `mean` and standard deviation `std` at point `x`.
+    static func normalDistributionCdf(_ x: Double, mean: Double, std: Double) -> Double {
+        0.5 * erfc(((mean - x)/std) * sqrt(0.5))
+    }
 }
 
 // MARK: Averages
