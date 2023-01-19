@@ -125,6 +125,20 @@ final class ToolboxTests: XCTestCase {
         }
     }
     
+    func testVariance() {
+        let tests: [([Double], Double)] = [
+            ([1, 2, 3], 1),
+            ([1, 2, 3, 7, 9, 10], 14.66667),
+            ([1, 1, 3, 5, 6, 8, 9, 10, 26], 58),
+            ([-9, -3, 1, 1, 5, 6, 8, 10, 26], 96),
+        ]
+        
+        for (values, variance) in tests {
+            XCTAssertEqual(variance, values.sampleVariance ?? 0, accuracy: 0.01)
+            XCTAssertEqual(sqrt(variance), values.sampleStandardDeviation ?? 0, accuracy: 0.01)
+        }
+    }
+    
     func testSetExtensions() {
         let tests: [(Set<Int>, [Int], Int)] = [
             ([1, 2, 3, 4, 5], [1, 3, 8, 9], 2),
