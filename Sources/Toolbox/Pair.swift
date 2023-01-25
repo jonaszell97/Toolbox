@@ -28,7 +28,11 @@ public struct Pair<T, U> {
     }
 }
 
-extension Pair: Codable where T: Codable, U: Codable {
+extension Pair: Encodable where T: Encodable, U: Encodable {
+    
+}
+
+extension Pair: Decodable where T: Decodable, U: Decodable {
     
 }
 
