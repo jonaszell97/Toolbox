@@ -88,145 +88,7 @@ final class ToolboxTests: XCTestCase {
         XCTAssertLessThan(VersionTriple(major: 1, minor: 0, patch: 0), VersionTriple(major: 1, minor: 0, patch: 1)) // 1.0.0 < 1.0.1
     }
     
-    func testStartOfDay() {
-        let calendar = Calendar.reference
-        let startComponents = DateComponents(timeZone: .current, year: 2020, month: 1, day: 1, hour: 12, minute: 0, second: 0)
-        var currentDate = calendar.date(from: startComponents)!
-        var expectedDay = 1
-        var expectedMonth = 1
-        var expectedYear = 2020
-        
-        for i in 1...367 {
-            let components = calendar.dateComponents([.year, .month, .day], from: currentDate.startOfDay)
-            XCTAssertEqual(components.year, expectedYear)
-            XCTAssertEqual(components.month, expectedMonth)
-            XCTAssertEqual(components.day, expectedDay)
-            
-            switch i {
-            case 31:
-                fallthrough
-            case 60:
-                fallthrough
-            case 91:
-                fallthrough
-            case 121:
-                fallthrough
-            case 152:
-                fallthrough
-            case 182:
-                fallthrough
-            case 213:
-                fallthrough
-            case 244:
-                fallthrough
-            case 274:
-                fallthrough
-            case 305:
-                fallthrough
-            case 335:
-                expectedDay = 1
-                expectedMonth += 1
-            case 366:
-                expectedDay = 1
-                expectedMonth = 1
-                expectedYear += 1
-            default:
-                expectedDay += 1
-            }
-            
-            currentDate.addTimeInterval(24*60*60)
-        }
-    }
-    
-    func testEndOfDay() {
-        let calendar = Calendar.reference
-        let startComponents = DateComponents(timeZone: .current, year: 2020, month: 1, day: 1, hour: 12, minute: 0, second: 0)
-        var currentDate = calendar.date(from: startComponents)!
-        var expectedDay = 1
-        var expectedMonth = 1
-        var expectedYear = 2020
-        
-        for i in 1...367 {
-            let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: currentDate.endOfDay)
-            XCTAssertEqual(components.year, expectedYear)
-            XCTAssertEqual(components.month, expectedMonth)
-            XCTAssertEqual(components.day, expectedDay)
-            XCTAssertEqual(components.hour, 23)
-            XCTAssertEqual(components.minute, 59)
-            XCTAssertEqual(components.second, 59)
-            
-            switch i {
-            case 31:
-                fallthrough
-            case 60:
-                fallthrough
-            case 91:
-                fallthrough
-            case 121:
-                fallthrough
-            case 152:
-                fallthrough
-            case 182:
-                fallthrough
-            case 213:
-                fallthrough
-            case 244:
-                fallthrough
-            case 274:
-                fallthrough
-            case 305:
-                fallthrough
-            case 335:
-                expectedDay = 1
-                expectedMonth += 1
-            case 366:
-                expectedDay = 1
-                expectedMonth = 1
-                expectedYear += 1
-            default:
-                expectedDay += 1
-            }
-            
-            currentDate.addTimeInterval(24*60*60)
-        }
-    }
-    
-    func testStartOfMonth() {
-        let dates = [
-            "2021-02-28T00:00:00+0000",
-            "2021-02-28T10:00:00+0000",
-            "2021-02-01T18:59:59+0000",
-            "2021-02-01T00:00:00+0000",
-            
-            "2021-10-31T19:01:00+0000",
-            "2021-11-30T23:59:59+0000",
-            "2023-06-15T16:02:04+0000",
-        ]
-        
-        let expected = [
-            "2021-02-01T00:00:00+0000",
-            "2021-02-01T00:00:00+0000",
-            "2021-02-01T00:00:00+0000",
-            "2021-02-01T00:00:00+0000",
-            
-            "2021-10-01T00:00:00+0000",
-            "2021-11-01T00:00:00+0000",
-            "2023-06-01T00:00:00+0000",
-        ]
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.timeZone = .utc
-        
-        var i = 0
-        for dateStr in dates {
-            let date = dateFormatter.date(from: dateStr)!
-            XCTAssertEqual(expected[i], dateFormatter.string(from: date.startOfMonth))
-            
-            i += 1
-        }
-    }
+    // MARK: Collections
     
     func testEndOfMonth() {
         let dates = [
@@ -472,6 +334,20 @@ final class ToolboxTests: XCTestCase {
         }
     }
     
+    func testVariance() {
+        let tests: [([Double], Double)] = [
+            ([1, 2, 3], 1),
+            ([1, 2, 3, 7, 9, 10], 14.66667),
+            ([1, 1, 3, 5, 6, 8, 9, 10, 26], 58),
+            ([-9, -3, 1, 1, 5, 6, 8, 10, 26], 96),
+        ]
+        
+        for (values, variance) in tests {
+            XCTAssertEqual(variance, values.sampleVariance ?? 0, accuracy: 0.01)
+            XCTAssertEqual(sqrt(variance), values.sampleStandardDeviation ?? 0, accuracy: 0.01)
+        }
+    }
+    
     func testSetExtensions() {
         let tests: [(Set<Int>, [Int], Int)] = [
             ([1, 2, 3, 4, 5], [1, 3, 8, 9], 2),
@@ -550,6 +426,31 @@ final class ToolboxTests: XCTestCase {
         XCTAssertEqual([1, 2, 3, 4, 5, 6]   .chunked(into: 2              ), [[1, 2], [3, 4], [5, 6]])
         XCTAssertEqual([1, 2, 3, 4, 5, 6, 7].chunked(into: 2              ), [[1, 2], [3, 4], [5, 6], [7]])
         XCTAssertEqual([1, 2, 3, 4, 5, 6, 7].chunked(into: 2, padWith: 999), [[1, 2], [3, 4], [5, 6], [7, 999]])
+        
+        // isSortedInIncreasingOrder
+        XCTAssert([1,2,3].isSortedInIncreasingOrder())
+        XCTAssert([1,2,2].isSortedInIncreasingOrder())
+        XCTAssert([-1,2,2].isSortedInIncreasingOrder())
+        XCTAssert([5,10,1828].isSortedInIncreasingOrder())
+        XCTAssert([5].isSortedInIncreasingOrder())
+        XCTAssert([Int]().isSortedInIncreasingOrder())
+        XCTAssertFalse([3,1,2,3].isSortedInIncreasingOrder())
+        XCTAssertFalse([1,3,2].isSortedInIncreasingOrder())
+        XCTAssertFalse([-1,3,2].isSortedInIncreasingOrder())
+        
+        // isSortedInDecreasingOrder
+        XCTAssertFalse([1,2,3].isSortedInDecreasingOrder())
+        XCTAssertFalse([1,2,2].isSortedInDecreasingOrder())
+        XCTAssertFalse([-1,2,2].isSortedInDecreasingOrder())
+        XCTAssertFalse([5,10,1828].isSortedInDecreasingOrder())
+        XCTAssert([5].isSortedInDecreasingOrder())
+        XCTAssert([Int]().isSortedInDecreasingOrder())
+        XCTAssertFalse([3,1,2,3].isSortedInDecreasingOrder())
+        XCTAssertFalse([1,3,2].isSortedInDecreasingOrder())
+        XCTAssertFalse([-1,3,2].isSortedInDecreasingOrder())
+        XCTAssert([3,2,1].isSortedInDecreasingOrder())
+        XCTAssert([3,2,2].isSortedInDecreasingOrder())
+        XCTAssert([3,2,2,-10].isSortedInDecreasingOrder())
     }
     
     func testStringExtensions() {

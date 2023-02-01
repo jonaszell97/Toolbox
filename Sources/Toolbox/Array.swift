@@ -10,6 +10,55 @@ public extension Array {
     }
 }
 
+public extension Array where Element: Comparable {
+    /// - returns: True iff this array is sorted in increasing order.
+    func isSortedInIncreasingOrder() -> Bool {
+        guard self.count > 1 else {
+            return true
+        }
+        
+        for i in 1..<self.count {
+            guard self[i - 1] <= self[i] else {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    /// - returns: True iff this array is sorted in decreasing order.
+    func isSortedInDecreasingOrder() -> Bool {
+        guard self.count > 1 else {
+            return true
+        }
+        
+        for i in 1..<self.count {
+            guard self[i - 1] >= self[i] else {
+                return false
+            }
+        }
+        
+        return true
+    }
+}
+
+public extension Array {
+    /// - returns: True iff this array is sorted in increasing order.
+    func isSorted(by areInIncreasingOrder: (Element, Element) -> Bool) -> Bool {
+        guard self.count > 1 else {
+            return true
+        }
+        
+        for i in 1..<self.count {
+            guard areInIncreasingOrder(self[i - 1], self[i]) else {
+                return false
+            }
+        }
+        
+        return true
+    }
+}
+
 public extension Array {
     /// - returns: An array containing the elements of this array grouped into chunks of size `size`.
     func chunked(into size: Int) -> [[Element]] {
