@@ -1,6 +1,7 @@
 
 import Foundation
 
+/// A semantic versioning-compliant version triple.
 public struct VersionTriple: Codable, Hashable {
     /// The major version number.
     public let major: Int

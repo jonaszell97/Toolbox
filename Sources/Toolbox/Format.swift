@@ -1,6 +1,7 @@
 
 import Foundation
 
+/// This type serves as a namespace for Formatting-related utility functions.
 public enum FormatToolbox {
     /// The common formatter to use.
     public static let formatter: NumberFormatter = NumberFormatter()

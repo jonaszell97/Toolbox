@@ -6,7 +6,10 @@ import os
 import Combine
 #endif
 
+/// This class serves as a namespace for all logging related functions.
 public final class Log {
+    /// Custom closure that is used by `Toolbox` functions to report a critical error in an application.
+    /// Users of this library can overwrite this property to customize the recovery of a critical error.
     public static var reportCriticalError: (String) -> Void = {
         fatalError($0)
     }
@@ -20,6 +23,7 @@ public extension OSLog {
     }
 }
 
+/// This singleton class is used to make all logs accessible to the application in Debug builds.
 public final class LogContainer: ObservableObject {
     #if canImport(Combine)
     /// List of all log messages in chronological order.
@@ -36,6 +40,7 @@ public final class LogContainer: ObservableObject {
     public init() {}
 }
 
+/// An alternative to `os/Logger` that stores its logs in ``LogContainer``.
 public struct Logger {
     /// The logger subsystem.
     public let subsystem: String

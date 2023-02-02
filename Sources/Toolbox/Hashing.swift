@@ -1,9 +1,15 @@
 
 import Foundation
 
+/// This type provides common utilities for hashing.
 public enum HashingToolbox {
-    // https://stackoverflow.com/questions/2590677/how-do-i-combine-hash-values-in-c0x
+    /// Combine two hash values to form a new one.
+    ///
+    /// - Parameters:
+    ///   - lhs: The first hash value. This is also where the result is stored.
+    ///   - rhs: The second hash value.
     public static func combineHashes(_ lhs: inout Int, _ rhs: Int) {
+        // https://stackoverflow.com/questions/2590677/how-do-i-combine-hash-values-in-c0x
         lhs ^= rhs &+ 0x9e3779b9 &+ (lhs &<< 6) &+ (lhs &>> 2)
     }
 }
