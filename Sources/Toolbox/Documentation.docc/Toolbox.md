@@ -13,10 +13,11 @@ In addition to its own functions and types, Toolbox provides useful extensions t
 - ``FormatToolbox``
 - ``FormatToolbox/format(_:)``
 - ``FormatToolbox/format(_:alwaysShowSign:)``
-- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:alwaysShowSign:)``
-- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:)-8b5bk``
-- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:)-9jlbz``
-- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:)-8nta3``
+- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:alwaysShowSign:)-7xqxl``
+- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:alwaysShowSign:)-60ikv``
+- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:alwaysShowSign:)-4khnz``
+- ``FormatToolbox/format(_:decimalPlaces:minDecimalPlaces:)``
+- ``FormatToolbox/formatOrdinal(_:)``
 - ``FormatToolbox/formatYear(_:)``
 - ``FormatToolbox/formatDate(_:timeZone:locale:dateStyle:)``
 - ``FormatToolbox/formatTime(_:timeZone:locale:timeStyle:)``
