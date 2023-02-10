@@ -1,24 +1,33 @@
 
 import Foundation
 
+/// This type serves as a namespace for Maths-related utility functions.
 public enum MathsToolbox { }
 
 // MARK: General maths functions
 
 public extension MathsToolbox {
-    /// - returns: If `value` is lower than `lower` or higher than `higher`, returns those respective limits. Otherwise returns `value` unchanged.
+    /// Clamp a value between a lower and upper bound.
+    ///
+    /// The value returned by this function is never lower than `lower` and never higher than `upper`.
+    ///
+    /// - Returns: If `value` is lower than `lower` or higher than `upper`, returns those respective limits. Otherwise returns `value` unchanged.
+    /// - Parameters:
+    ///   - value: The value to clamp.
+    ///   - lower: The lower bound of the result.
+    ///   - upper: The upper bound of the result
     static func clamp<T: Comparable>(_ value: T, lower: T, upper: T) -> T {
-        return max(lower, min(value, upper))
+        max(lower, min(value, upper))
     }
 }
 
 public extension Decimal {
-    /// - returns: The value of this decimal as a Double.
+    /// - Returns: The value of this decimal as a Double.
     var doubleValue: Double {
         return NSDecimalNumber(decimal:self).doubleValue
     }
     
-    /// - returns: The value of this decimal rounded to an Int.
+    /// - Returns: The value of this decimal rounded to an Int.
     var intValue: Int {
         return NSDecimalNumber(decimal:self).intValue
     }
@@ -32,12 +41,22 @@ precedencegroup PowerPrecedence { higherThan: MultiplicationPrecedence }
 /// The exponentiation operator.
 infix operator ** : PowerPrecedence
 
-/// - returns: `radix` raised to the power of `power`.
+/// Exponentiation operator for integers.
+///
+/// - Parameters:
+///   - radix: The number to exponentiate.
+///   - power: The power of the exponentiation.
+/// - Returns: `radix` raised to the power of `power`.
 public func **(radix: Int, power: Int) -> Int {
     return Int(pow(Double(radix), Double(power)))
 }
 
-/// - returns: `radix` raised to the power of `power`.
+/// Exponentiation operator for Decimals.
+///
+/// - Parameters:
+///   - radix: The number to exponentiate.
+///   - power: The power of the exponentiation.
+/// - Returns: `radix` raised to the power of `power`.
 public func **(radix: Decimal, power: Int) -> Decimal {
     if power == 0 {
         return 1
@@ -58,7 +77,7 @@ public func **(radix: Decimal, power: Int) -> Decimal {
 // MARK: Factorial
 
 public extension MathsToolbox {
-    /// - returns: The factorial of `n`, i.e. the result of n×(n-1)×...×1
+    /// - Returns: The factorial of `n`, i.e. the result of n×(n-1)×...×1
     static func factorial(_ n: Int) -> Int {
         if n < 3 {
             return max(1, n)
@@ -98,7 +117,9 @@ public extension MathsToolbox {
 // MARK: Digit counting
 
 public extension MathsToolbox {
-    /// - returns:The number of digits required to represent `n` as a string, optionally accounting for thousands separators.
+    /// Calculate the required number of characters to print a number in decimal.
+    ///
+    /// - Returns:The number of digits required to represent `n` as a deicmal string, optionally accounting for thousands separators.
     static func requiredDigits(_ n: Int?, thousandsSeparators: Bool = true) -> Int {
         guard var n = n else {
             return 1
@@ -127,7 +148,9 @@ public extension MathsToolbox {
         return digits + Int(p.rounded(.awayFromZero))
     }
     
-    /// - returns:The number of digits required to represent `n` as a string, including the decimal point, with no thousands separators.
+    /// Calculate the required number of characters to print a number in decimal.
+    ///
+    /// - Returns:The number of digits required to represent `n` as a string, including the decimal point, with no thousands separators.
     static func requiredDigits(_ n: Decimal?) -> Int {
         guard var n = n else {
             return 1
@@ -164,7 +187,9 @@ public extension MathsToolbox {
         return digits + requiredDigits(Int(n.rounded(0, .down).doubleValue), thousandsSeparators: false) + (hasDecimalPoint ? 1 : 0)
     }
     
-    /// - returns:The number of digits required to represent `n` as a string in a given base.
+    /// Calculate the required number of characters to print a number in a given base.
+    ///
+    /// - Returns:The number of digits required to represent `n` as a string in a given base.
     static func requiredDigits(_ n: Int?, base: Int) -> Int {
         guard var n = n else {
             return 1
@@ -188,7 +213,9 @@ public extension MathsToolbox {
         return digits + Int(p.rounded(.awayFromZero))
     }
     
-    /// - returns:The decimal digits of `n`, from most significant to least.
+    /// Determine the decimal digits of a given number.
+    ///
+    /// - Returns:The decimal digits of `n`, from most significant to least.
     static func decimalDigits(of n: Int) -> [Int] {
         guard n != 0 else {
             return [0]
@@ -209,7 +236,7 @@ public extension MathsToolbox {
 }
 
 public extension Int {
-    /// - returns:The decimal digits of `n`, from most significant to least.
+    /// - Returns:The decimal digits of `n`, from most significant to least.
     var digits: [Int] {
         MathsToolbox.decimalDigits(of: self)
     }
@@ -218,7 +245,7 @@ public extension Int {
 // MARK: Rounding
 
 public extension Decimal {
-    /// - returns: This decimal value rounded to a given scale and mode.
+    /// - Returns: This decimal value rounded to a given scale and mode.
     func rounded(_ scale: Int = 0, _ mode: NSDecimalNumber.RoundingMode = .bankers) -> Decimal {
         var this = self
         var rounded = Decimal()
@@ -245,7 +272,7 @@ public extension BinaryFloatingPoint {
         self += (multiple - remainder)
     }
     
-    /// - returns: This number rounded up to a multiple of `multiple`.
+    /// - Returns: This number rounded up to a multiple of `multiple`.
     func roundedUp(toMultipleOf multiple: Self) -> Self {
         var copy = self
         copy.roundUp(toMultipleOf: multiple)
@@ -265,7 +292,7 @@ public extension BinaryFloatingPoint {
         self -= remainder
     }
     
-    /// - returns: This number rounded down to a multiple of `multiple`.
+    /// - Returns: This number rounded down to a multiple of `multiple`.
     func roundedDown(toMultipleOf multiple: Self) -> Self {
         var copy = self
         copy.roundDown(toMultipleOf: multiple)
@@ -273,7 +300,7 @@ public extension BinaryFloatingPoint {
         return copy
     }
     
-    /// - returns:This number rounded to a given number of decimal places.
+    /// - Returns:This number rounded to a given number of decimal places.
     func rounded(toDecimalPlaces decimalPlaces: Int) -> Self {
         let pow = Self(10 ** decimalPlaces)
         let rounded = Int(self * pow)
@@ -299,7 +326,7 @@ public extension SignedInteger {
         self += (multiple - remainder)
     }
     
-    /// - returns: This number rounded up to a multiple of `multiple`.
+    /// - Returns: This number rounded up to a multiple of `multiple`.
     func roundedUp(toMultipleOf multiple: Self) -> Self {
         var copy = self
         copy.roundUp(toMultipleOf: multiple)
@@ -319,7 +346,7 @@ public extension SignedInteger {
         self -= remainder
     }
     
-    /// - returns: This number rounded down to a multiple of `multiple`.
+    /// - Returns: This number rounded down to a multiple of `multiple`.
     func roundedDown(toMultipleOf multiple: Self) -> Self {
         var copy = self
         copy.roundDown(toMultipleOf: multiple)

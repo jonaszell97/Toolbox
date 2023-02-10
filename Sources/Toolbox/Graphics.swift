@@ -14,7 +14,10 @@ public extension CGRect {
         width * height
     }
     
-    /// A random point in this rectangle.
+    /// Generate a random point inside of or on the edge of this rectangle.
+    ///
+    /// - Parameter rng: The random number generator to use.
+    /// - Returns: A random point inside of or on the edge of this rectangle.
     func randomPoint(using rng: inout ARC4RandomNumberGenerator) -> CGPoint {
         let x = CGFloat.random(in: 0..<self.width)
         let y = CGFloat.random(in: 0..<self.height)
@@ -92,6 +95,7 @@ extension CGRect: Hashable {
 }
 
 extension CGPoint {
+    /// Scale the point by the given dimensions.
     public mutating func scale(by rhs: Double) {
         x = x * CGFloat(rhs)
         y = y * CGFloat(rhs)
@@ -106,27 +110,22 @@ extension CGPoint {
         Double((x*x) + (y*y))
     }
     
-    // Vector addition
     public static func + (left: CGPoint, right: CGPoint) -> CGPoint {
         return CGPoint(x: left.x + right.x, y: left.y + right.y)
     }
     
-    // Vector subtraction
     public static func - (left: CGPoint, right: CGPoint) -> CGPoint {
         return CGPoint(x: left.x - right.x, y: left.y - right.y)
     }
     
-    // Vector addition assignment
     public static func += (left: inout CGPoint, right: CGPoint) {
         left = left + right
     }
     
-    // Vector subtraction assignment
     public static func -= (left: inout CGPoint, right: CGPoint) {
         left = left - right
     }
     
-    // Vector negation
     public static prefix func - (vector: CGPoint) -> CGPoint {
         return CGPoint(x: -vector.x, y: -vector.y)
     }
@@ -142,27 +141,22 @@ extension CGSize {
         Double((width*width) + (height*height))
     }
     
-    // Vector addition
     public static func + (left: CGSize, right: CGSize) -> CGSize {
         return CGSize(width: left.width + right.width, height: left.height + right.height)
     }
     
-    // Vector subtraction
     public static func - (left: CGSize, right: CGSize) -> CGSize {
         return CGSize(width: left.width - right.width, height: left.height - right.height)
     }
     
-    // Vector addition assignment
     public static func += (left: inout CGSize, right: CGSize) {
         left = left + right
     }
     
-    // Vector subtraction assignment
     public static func -= (left: inout CGSize, right: CGSize) {
         left = left - right
     }
     
-    // Vector negation
     public static prefix func - (vector: CGSize) -> CGSize {
         return CGSize(width: -vector.width, height: -vector.height)
     }

@@ -22,13 +22,13 @@ public extension TimeZone {
 public extension Date {
     fileprivate static let secondsPerDay: TimeInterval = 24 * 60 * 60
     
-    /// - returns: A date representing the start of the day this date is in.
+    /// - Returns: A date representing the start of the day of `self`, i.e. 00:00:00.
     var startOfDay: Date {
         let components = Calendar.reference.dateComponents([.day, .month, .year], from: self)
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: A date representing the end of the day this date is in.
+    /// - Returns: A date representing the end of the day of `self`, i.e. 23:59:59.
     var endOfDay: Date {
         startOfDay.addingTimeInterval(23*60*60 + 59*60 + 59)
     }
@@ -37,7 +37,7 @@ public extension Date {
         case sunday, monday
     }
     
-    /// - returns: A date representing the start of the week this date is in.
+    /// - Returns: A date representing the start of the week of `self`.
     func startOfWeek(weekStartsOn firstWeekday: FirstDayOfWeek) -> Date {
         let components = Calendar.reference.dateComponents([.year, .month, .day, .weekday], from: self)
         let desiredWeekday: Int
@@ -62,23 +62,23 @@ public extension Date {
         return Calendar.reference.date(from: components)!.addingTimeInterval(24*60*60*TimeInterval(difference))
     }
     
-    /// - returns: A date representing the end of the week this date is in.
+    /// - Returns: A date representing the end of the week of `self`.
     func endOfWeek(weekStartsOn firstWeekday: FirstDayOfWeek) -> Date {
         startOfWeek(weekStartsOn: firstWeekday).addingTimeInterval(7*24*60*60 - 1)
     }
     
-    /// - returns: A date representing the start of the month this date is in.
+    /// - Returns: A date representing the start of the month of `self`.
     var startOfMonth: Date {
         let components = Calendar.reference.dateComponents([.year, .month], from: self)
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: A date representing the end of the month this date is in.
+    /// - Returns: A date representing the end of the month of `self`.
     var endOfMonth: Date {
         Calendar.reference.date(byAdding: DateComponents(month: 1, second: -1), to: self.startOfMonth)!
     }
     
-    /// - returns: A date representing the start of the quarter this date is in.
+    /// - Returns: A date representing the start of the quarter of `self`.
     var startOfQuarter: Date {
         var components = Calendar.reference.dateComponents([.year, .month], from: self)
         switch components.month! {
@@ -97,12 +97,12 @@ public extension Date {
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: A date representing the end of the month this date is in.
+    /// - Returns: A date representing the end of the quarter of `self`.
     var endOfQuarter: Date {
         Calendar.reference.date(byAdding: DateComponents(month: 3, second: -1), to: self.startOfQuarter)!
     }
     
-    /// - returns: A date representing the start of the half of the year this date is in.
+    /// - Returns: A date representing the start of the half year of `self`.
     var startOfYearHalf: Date {
         var components = Calendar.reference.dateComponents([.year, .month], from: self)
         switch components.month! {
@@ -117,12 +117,12 @@ public extension Date {
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: A date representing the end of the half of the year this date is in.
+    /// - Returns: A date representing the end of the half year of `self`.
     var endOfYearHalf: Date {
         Calendar.reference.date(byAdding: DateComponents(month: 6, second: -1), to: self.startOfYearHalf)!
     }
     
-    /// - returns: A date representing the start of the year this date is in.
+    /// - Returns: A date representing the start of the year of `self`.
     var startOfYear: Date {
         var components = Calendar.reference.dateComponents([.year], from: self)
         components.day = 1
@@ -131,7 +131,7 @@ public extension Date {
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: A date representing the end of the year this date is in.
+    /// - Returns: A date representing the end of the year of `self`.
     var endOfYear: Date {
         var components = Calendar.reference.dateComponents([.year], from: self)
         components.day = 31
@@ -143,7 +143,7 @@ public extension Date {
         return Calendar.reference.date(from: components)!
     }
     
-    /// - returns: This date converted to a different time zone.
+    /// - Returns: This date converted to a different time zone.
     func convertToTimeZone(initTimeZone: TimeZone = .init(secondsFromGMT: 0)!, timeZone: TimeZone) -> Date {
         let delta = TimeInterval(timeZone.secondsFromGMT(for: self) - initTimeZone.secondsFromGMT(for: self))
         return addingTimeInterval(delta)
@@ -151,7 +151,7 @@ public extension Date {
 }
 
 public extension Calendar {
-    /// - returns: The weekday number after the given one.
+    /// - Returns: The weekday number after the given one.
     static func weekday(after day: Int) -> Int {
         switch day {
         case 7:
@@ -163,7 +163,9 @@ public extension Calendar {
 }
 
 public extension DateInterval {
-    /// - returns: This date interval expanded to contain the given date.
+    /// Expand a date interval to contain a given `date`.
+    ///
+    /// - Returns: This date interval expanded to contain `date`.
     func expanding(toContain date: Date) -> DateInterval {
         var copy = self
         copy.expand(toContain: date)
@@ -181,7 +183,9 @@ public extension DateInterval {
         }
     }
     
-    /// - returns: True if any date in `ìnterval` is included within this interval.
+    /// Check whether `self` overlaps the DateInterval in `interval`.
+    /// 
+    /// - Returns: True if any date in `ìnterval` is included within this interval.
     func overlaps(_ interval: DateInterval) -> Bool {
         (interval.start >= self.start && interval.start <= self.end)
             || (interval.end <= self.end && interval.end >= self.start)

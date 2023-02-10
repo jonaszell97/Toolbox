@@ -2,8 +2,9 @@
 import Foundation
 
 // Adapted from Swift.Tensorflow
+/// A deterministic, seedable random number generator.
 public struct ARC4RandomNumberGenerator: RandomNumberGenerator, Codable {
-    /// A shared RNG instance.
+    /// The shared RNG instance.
     public static var shared = ARC4RandomNumberGenerator()
     
     var state: [UInt8] = Array(0...255)
@@ -11,8 +12,9 @@ public struct ARC4RandomNumberGenerator: RandomNumberGenerator, Codable {
     var jPos: UInt8 = 0
     public let seed: [UInt8]
     
-    /// Initialize ARC4RandomNumberGenerator using an array of UInt8. The array
-    /// must have length between 1 and 256 inclusive.
+    /// Initialize ARC4RandomNumberGenerator using an array of UInt8.
+    ///
+    /// - Parameter seed: The seed value for the RNG. Its length must be in the interval [1, 256].
     public init(seed: [UInt8]) {
         precondition(seed.count > 0, "Length of seed must be positive")
         precondition(seed.count <= 256, "Length of seed must be at most 256")
@@ -26,6 +28,9 @@ public struct ARC4RandomNumberGenerator: RandomNumberGenerator, Codable {
         }
     }
     
+    /// Initiialize using an integer seed.
+    ///
+    /// - Parameter seedValue: The seed value.
     public init(seed seedValue: UInt64) {
         var seed = [UInt8](repeating: 0, count: 8)
         for i in 0..<8 {
@@ -35,10 +40,12 @@ public struct ARC4RandomNumberGenerator: RandomNumberGenerator, Codable {
         self.init(seed: seed)
     }
     
+    /// Initialize using a random seed.
     public init() {
         self.init(seed: UInt64.random(in: UInt64.min...UInt64.max))
     }
     
+    /// Reset the state of this RNG.
     public mutating func reset() {
         self = .init(seed: seed)
     }

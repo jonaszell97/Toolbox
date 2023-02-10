@@ -72,6 +72,12 @@ public extension JSONDecoder {
 
 /// Kinda makes you wish that Swift had variadic generics.
 public extension KeyedEncodingContainer {
+    /// Encodes two encodable values in a nested unkeyed container.
+    ///
+    /// - Parameters:
+    ///   - v1: The first value to encode.
+    ///   - v2: The second value to encode.
+    ///   - key: The coding key used to identify the nested container.
     mutating func encodeValues<V1: Encodable, V2: Encodable>(
         _ v1: V1,
         _ v2: V2,
@@ -82,6 +88,13 @@ public extension KeyedEncodingContainer {
         try container.encode(v2)
     }
     
+    /// Encodes three encodable values in a nested unkeyed container.
+    ///
+    /// - Parameters:
+    ///   - v1: The first value to encode.
+    ///   - v2: The second value to encode.
+    ///   - v3: The third value to encode.
+    ///   - key: The coding key used to identify the nested container.
     mutating func encodeValues<V1: Encodable, V2: Encodable, V3: Encodable>(
         _ v1: V1,
         _ v2: V2,
@@ -94,6 +107,14 @@ public extension KeyedEncodingContainer {
         try container.encode(v3)
     }
     
+    /// Encodes four encodable values in a nested unkeyed container.
+    ///
+    /// - Parameters:
+    ///   - v1: The first value to encode.
+    ///   - v2: The second value to encode.
+    ///   - v3: The third value to encode.
+    ///   - v4: The fourth value to encode.
+    ///   - key: The coding key used to identify the nested container.
     mutating func encodeValues<V1: Encodable, V2: Encodable, V3: Encodable, V4: Encodable>(
         _ v1: V1,
         _ v2: V2,
@@ -108,6 +129,15 @@ public extension KeyedEncodingContainer {
         try container.encode(v4)
     }
     
+    /// Encodes five encodable values in a nested unkeyed container.
+    ///
+    /// - Parameters:
+    ///   - v1: The first value to encode.
+    ///   - v2: The second value to encode.
+    ///   - v3: The third value to encode.
+    ///   - v4: The fourth value to encode.
+    ///   - v5: The fifth value to encode.
+    ///   - key: The coding key used to identify the nested container.
     mutating func encodeValues<V1: Encodable, V2: Encodable, V3: Encodable, V4: Encodable, V5: Encodable>(
         _ v1: V1,
         _ v2: V2,
@@ -124,6 +154,16 @@ public extension KeyedEncodingContainer {
         try container.encode(v5)
     }
     
+    /// Encodes six encodable values in a nested unkeyed container.
+    ///
+    /// - Parameters:
+    ///   - v1: The first value to encode.
+    ///   - v2: The second value to encode.
+    ///   - v3: The third value to encode.
+    ///   - v4: The fourth value to encode.
+    ///   - v5: The fifth value to encode.
+    ///   - v6: The sixth value to encode.
+    ///   - key: The coding key used to identify the nested container.
     mutating func encodeValues<V1: Encodable, V2: Encodable, V3: Encodable, V4: Encodable, V5: Encodable, V6: Encodable>(
         _ v1: V1,
         _ v2: V2,
@@ -142,6 +182,17 @@ public extension KeyedEncodingContainer {
         try container.encode(v6)
     }
     
+    /// Encodes seven encodable values in a nested unkeyed container.
+    ///
+    /// - Parameters:
+    ///   - v1: The first value to encode.
+    ///   - v2: The second value to encode.
+    ///   - v3: The third value to encode.
+    ///   - v4: The fourth value to encode.
+    ///   - v5: The fifth value to encode.
+    ///   - v6: The sixth value to encode.
+    ///   - v7: The seventh value to encode.
+    ///   - key: The coding key used to identify the nested container.
     mutating func encodeValues<V1: Encodable, V2: Encodable, V3: Encodable, V4: Encodable, V5: Encodable, V6: Encodable, V7: Encodable>(
         _ v1: V1,
         _ v2: V2,
@@ -164,6 +215,10 @@ public extension KeyedEncodingContainer {
 }
 
 public extension KeyedDecodingContainer {
+    /// Decode two values from that were previously encoded using ``KeyedEncodingContainer/encodeValues(_:_:key:)``.
+    ///
+    /// - Parameter key: The coding key used to identify the nested container.
+    /// - Returns: The decoded values as a tuple.
     func decodeValues<V1: Decodable, V2: Decodable>(
         for key: Key
     ) throws -> (V1, V2) {
@@ -174,6 +229,10 @@ public extension KeyedDecodingContainer {
         )
     }
     
+    /// Decode three values from that were previously encoded using ``KeyedEncodingContainer/encodeValues(_:_:_:key:)``.
+    ///
+    /// - Parameter key: The coding key used to identify the nested container.
+    /// - Returns: The decoded values as a tuple.
     func decodeValues<V1: Decodable, V2: Decodable, V3: Decodable>(
         for key: Key
     ) throws -> (V1, V2, V3) {
@@ -185,6 +244,10 @@ public extension KeyedDecodingContainer {
         )
     }
     
+    /// Decode four values from that were previously encoded using ``KeyedEncodingContainer/encodeValues(_:_:_:_:key:)``.
+    ///
+    /// - Parameter key: The coding key used to identify the nested container.
+    /// - Returns: The decoded values as a tuple.
     func decodeValues<V1: Decodable, V2: Decodable, V3: Decodable, V4: Decodable>(
         for key: Key
     ) throws -> (V1, V2, V3, V4) {
@@ -197,6 +260,10 @@ public extension KeyedDecodingContainer {
         )
     }
     
+    /// Decode five values from that were previously encoded using ``KeyedEncodingContainer/encodeValues(_:_:_:_:_:key:)``.
+    ///
+    /// - Parameter key: The coding key used to identify the nested container.
+    /// - Returns: The decoded values as a tuple.
     func decodeValues<V1: Decodable, V2: Decodable, V3: Decodable, V4: Decodable, V5: Decodable>(
         for key: Key
     ) throws -> (V1, V2, V3, V4, V5) {
@@ -210,6 +277,10 @@ public extension KeyedDecodingContainer {
         )
     }
     
+    /// Decode six values from that were previously encoded using ``KeyedEncodingContainer/encodeValues(_:_:_:_:_:_:key:)``.
+    ///
+    /// - Parameter key: The coding key used to identify the nested container.
+    /// - Returns: The decoded values as a tuple.
     func decodeValues<V1: Decodable, V2: Decodable, V3: Decodable, V4: Decodable, V5: Decodable, V6: Decodable>(
         for key: Key
     ) throws -> (V1, V2, V3, V4, V5, V6) {
@@ -224,6 +295,10 @@ public extension KeyedDecodingContainer {
         )
     }
     
+    /// Decode seven values from that were previously encoded using ``KeyedEncodingContainer/encodeValues(_:_:_:_:_:_:_:key:)``.
+    ///
+    /// - Parameter key: The coding key used to identify the nested container.
+    /// - Returns: The decoded values as a tuple.
     func decodeValues<V1: Decodable, V2: Decodable, V3: Decodable, V4: Decodable, V5: Decodable, V6: Decodable, V7: Decodable>(
         for key: Key
     ) throws -> (V1, V2, V3, V4, V5, V6, V7) {
