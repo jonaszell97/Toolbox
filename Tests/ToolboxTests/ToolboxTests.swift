@@ -259,5 +259,25 @@ final class ToolboxTests: XCTestCase {
         XCTAssertEqual("hello".rightPadding(toExactLength: 3, withPad: " "), "hel")
         XCTAssertEqual("hello".rightPadding(toMinimumLength: 3, withPad: " "), "hello")
         XCTAssertEqual("hello".rightPadding(toMinimumLength: 7, withPad: " "), "hello  ")
+        
+        // Test case 1: padding with a single character
+        let paddedString1 = "Hello".rightPadding(toExactLength: 10, withPad: "-")
+        XCTAssertEqual(paddedString1, "Hello-----")
+        
+        // Test case 2: padding with a single character
+        let paddedString2 = "Goodbye".rightPadding(toExactLength: 8, withPad: "x")
+        XCTAssertEqual(paddedString2, "Goodbyex")
+        
+        // Test case 3: already exact length
+        let paddedString3 = "Exact".rightPadding(toExactLength: 5, withPad: "x")
+        XCTAssertEqual(paddedString3, "Exact")
+        
+        // Test case 4: empty string
+        let paddedString4 = "".rightPadding(toExactLength: 6, withPad: "x")
+        XCTAssertEqual(paddedString4, "xxxxxx")
+        
+        // Test case 5: length less than original string
+        let paddedString5 = "Short".rightPadding(toExactLength: 3, withPad: "x")
+        XCTAssertEqual(paddedString5, "Sho")
     }
 }
