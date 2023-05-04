@@ -269,3 +269,10 @@ extension CGPoint: Hashable {
         hasher.combine(self.y)
     }
 }
+
+public extension CGImage {
+    /// The size of this image.
+    var size: CGSize {
+        CGSize(width: self.width, height: self.height)
+    }
+}
