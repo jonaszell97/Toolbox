@@ -83,6 +83,16 @@ public extension CGRect {
         
         return .init(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
+    
+    /// Expand a bounding box rectangle to contain the given rectangle.
+    func expanded(toContain rect: CGRect) -> CGRect {
+        let minX = min(self.minX, rect.minX)
+        let minY = min(self.minY, rect.minY)
+        let maxX = max(self.maxX, rect.maxX)
+        let maxY = max(self.maxY, rect.maxY)
+        
+        return .init(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    }
 }
 
 extension CGRect: Hashable {
