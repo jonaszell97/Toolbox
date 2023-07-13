@@ -175,4 +175,16 @@ final class MathsTests: XCTestCase {
             }
         }
     }
+    
+    func testRectDistance() {
+        let r1 = CGRect(x: 0, y: 0, width: 5, height: 5)
+        let r2 = CGRect(x: 1, y: 1, width: 3, height: 6)
+        let r3 = CGRect(x: 6, y: 6, width: 3, height: 6)
+        
+        XCTAssertEqual(r1.distance(to: r1), 0)
+        XCTAssertEqual(r1.distance(to: r2), 0)
+        XCTAssertEqual(r1.distance(to: r3), sqrt(2))
+        
+        XCTAssertEqual(r2.distance(to: r3), 2)
+    }
 }
