@@ -98,4 +98,93 @@ final class MathsTests: XCTestCase {
         XCTAssertEqual(-25.0, (-27).roundedUp(toMultipleOf: 5))
         XCTAssertEqual(-25.0, (-25.001).roundedUp(toMultipleOf: 5))
     }
+    
+    func testPolygonContains() {
+        let points: [CGPoint] = [
+            .init(x: 0, y: 0),
+            .init(x: 0, y: 1),
+            .init(x: 1, y: 1),
+            .init(x: 1, y: 0),
+            .init(x: 0, y: 0),
+        ]
+        
+        let insidePoints: [CGPoint] = [
+            .init(x: 0.5, y: 0.5),
+            .init(x: 0, y: 0.5),
+            .init(x: 0.5, y: 0),
+            .init(x: 0, y: 0),
+        ]
+        
+        let outsidePoints: [CGPoint] = [
+            .init(x: 2, y: 0),
+            .init(x: 0, y: 1.1),
+            .init(x: 1.1, y: 1.1),
+            .init(x: 0, y: 2),
+        ]
+        
+        let multipliers: [CGFloat] = [1, 0.5, 1.5, 2, 5, 10, 100]
+        for multiplier in multipliers {
+            let polygon = Polygon2D(vertices: points.map { $0 * multiplier })
+            for pt in insidePoints {
+                XCTAssert(polygon.contains(pt * multiplier))
+            }
+            for pt in outsidePoints {
+                XCTAssertFalse(polygon.contains(pt * multiplier))
+            }
+        }
+        
+        for multiplier in multipliers {
+            let polygon = Polygon2D.convexHull(of: Set(points.map { $0 * multiplier }))
+            for pt in insidePoints {
+                XCTAssert(polygon.contains(pt * multiplier))
+            }
+            for pt in outsidePoints {
+                XCTAssertFalse(polygon.contains(pt * multiplier))
+            }
+        }
+    }
+    
+    func testConvexHull() {
+        let points: [CGPoint] = [
+            .init(x: 0, y: 0.5),
+            .init(x: 0.5, y: 1),
+            .init(x: 1, y: 0.5),
+            .init(x: 0.5, y: 0),
+            .init(x: 0, y: 0.5),
+        ]
+        
+        let insidePoints: [CGPoint] = [
+            .init(x: 0.5, y: 0.5),
+            .init(x: 0, y: 0.5),
+            .init(x: 0.5, y: 0),
+        ]
+        
+        let outsidePoints: [CGPoint] = [
+            .init(x: 0, y: 0),
+            .init(x: 1, y: 1),
+        ]
+        
+        let multipliers: [CGFloat] = [1, 0.5, 1.5, 2, 5, 10, 100]
+        for multiplier in multipliers {
+            let polygon = Polygon2D.convexHull(of: Set(points.map { $0 * multiplier }))
+            for pt in insidePoints {
+                XCTAssert(polygon.contains(pt * multiplier))
+            }
+            for pt in outsidePoints {
+                XCTAssertFalse(polygon.contains(pt * multiplier))
+            }
+        }
+    }
+    
+    func testRectDistance() {
+        let r1 = CGRect(x: 0, y: 0, width: 5, height: 5)
+        let r2 = CGRect(x: 1, y: 1, width: 3, height: 6)
+        let r3 = CGRect(x: 6, y: 6, width: 3, height: 6)
+        
+        XCTAssertEqual(r1.distance(to: r1), 0)
+        XCTAssertEqual(r1.distance(to: r2), 0)
+        XCTAssertEqual(r1.distance(to: r3), sqrt(2))
+        
+        XCTAssertEqual(r2.distance(to: r3), 2)
+    }
 }

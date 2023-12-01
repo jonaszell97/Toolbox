@@ -13,6 +13,9 @@ public final class Log {
     public static var reportCriticalError: (String) -> Void = {
         fatalError($0)
     }
+    
+    /// The logger used internally by Toolbox.
+    internal static let toolbox = Logger(subsystem: "com.jonaszell.Toolbox", category: "Toolbox")
 }
 
 #if DEBUG

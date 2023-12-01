@@ -124,4 +124,21 @@ public extension CGRect {
         
         return nil
     }
+    
+    /// Find the closest distance between two rectangles.
+    ///
+    /// - Parameter other: The rectangle to calculate the shortest distance to.
+    /// - Returns: The shortest distance between the two rectangles.
+    func distance(to other: CGRect) -> CGFloat {
+        if self.intersects(other) {
+            return 0
+        }
+        
+        let ux = CGPoint(x: self.minX, y: self.minY) - CGPoint(x: other.maxX, y: other.maxY)
+        let vx = CGPoint(x: other.minX, y: other.minY) - CGPoint(x: self.maxX, y: self.maxY)
+        let u = CGPoint(x: max(0, ux.x), y: max(0, ux.y))
+        let v = CGPoint(x: max(0, vx.x), y: max(0, vx.y))
+        
+        return sqrt(u.magnitudeSquared + v.magnitudeSquared)
+    }
 }

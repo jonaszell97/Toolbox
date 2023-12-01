@@ -83,6 +83,16 @@ public extension CGRect {
         
         return .init(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
+    
+    /// Expand a bounding box rectangle to contain the given rectangle.
+    func expanded(toContain rect: CGRect) -> CGRect {
+        let minX = min(self.minX, rect.minX)
+        let minY = min(self.minY, rect.minY)
+        let maxX = max(self.maxX, rect.maxX)
+        let maxY = max(self.maxY, rect.maxY)
+        
+        return .init(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    }
 }
 
 extension CGRect: Hashable {
@@ -267,5 +277,12 @@ extension CGPoint: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(self.x)
         hasher.combine(self.y)
+    }
+}
+
+public extension CGImage {
+    /// The size of this image.
+    var size: CGSize {
+        CGSize(width: self.width, height: self.height)
     }
 }
