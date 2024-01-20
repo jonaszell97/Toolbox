@@ -24,12 +24,13 @@ public extension MathsToolbox {
 public extension Decimal {
     /// - Returns: The value of this decimal as a Double.
     var doubleValue: Double {
-        return NSDecimalNumber(decimal:self).doubleValue
+        return NSDecimalNumber(decimal: self).doubleValue
     }
     
     /// - Returns: The value of this decimal rounded to an Int.
     var intValue: Int {
-        return NSDecimalNumber(decimal:self).intValue
+        // Attention! NSDecimalNumber.intValue sometimes returns very unexpected results
+        return Int(NSDecimalNumber(decimal: self.rounded()).int32Value)
     }
 }
 
