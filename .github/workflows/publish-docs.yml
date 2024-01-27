@@ -49,6 +49,7 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
         source: "docs/*"
         target: /var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
     # - name: Upload archive
