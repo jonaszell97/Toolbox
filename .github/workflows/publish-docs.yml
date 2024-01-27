@@ -28,8 +28,7 @@ jobs:
         # echo "<script>window.location.href += \"/documentation/toolbox\"</script>" > docs/index.html;
       - name: Upload archive
         run: |
-          sudo mkdir -p ~/.ssh
-          sudo echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          sudo chmod 700 ~/.ssh/id_rsa
-          sudo ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           scp -o StrictHostKeyChecking=no -r .docs/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}://var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
