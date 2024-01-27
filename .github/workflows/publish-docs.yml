@@ -10,7 +10,7 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 jobs:
-  deploy:
+  build:
     runs-on: macos-13
     steps:
       - name: Checkout
@@ -26,9 +26,34 @@ jobs:
       #       --hosting-base-path Toolbox \
       #       --output-path docs;
         # echo "<script>window.location.href += \"/documentation/toolbox\"</script>" > docs/index.html;
-      - name: Upload archive
+      - name: Mock build
         run: |
-          sudo echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          sudo chmod 700 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          scp -o StrictHostKeyChecking=no -r .docs/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}://var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
+          mkdir -p docs
+          echo "hello, world" > docs/index.txt
+      - uses: actions/upload-artifact@master
+        with:
+          name: docs-archive
+          path: docs/
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@master
+      with:
+        name: docs-archive
+        path: docs/
+    - name: Copy files
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        source: "docs/*"
+        target: /var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
+    # - name: Upload archive
+    #   run: |
+    #     mkdir -p ~/.ssh
+    #     echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+    #     chmod 700 ~/.ssh/id_rsa
+    #     ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+    #     scp -o StrictHostKeyChecking=no -r .docs/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}://var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
