@@ -1,6 +1,6 @@
 # ``Toolbox``
 
-Toolbox is a collection of useful extensions, functions, and types for building Swift apps.
+Toolbox is a collection of useful extensions, functions, and types for building Swift apps and packages.
 
 ## Overview
 
