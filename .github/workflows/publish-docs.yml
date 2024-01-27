@@ -27,11 +27,9 @@ jobs:
             --output-path docs;
         # echo "<script>window.location.href += \"/documentation/toolbox\"</script>" > docs/index.html;
       - name: Upload archive
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "docs/*"
-          target: /var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          scp -o StrictHostKeyChecking=no -r .docs/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}://var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
