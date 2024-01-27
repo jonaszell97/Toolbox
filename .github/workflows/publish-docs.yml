@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Build DocC
         run: |
+          sudo xcode-select -s /Applications/Xcode_15.0.app
           xcodebuild docbuild -scheme Toolbox \
             -derivedDataPath /tmp/docbuild \
             -destination 'generic/platform=iOS';
