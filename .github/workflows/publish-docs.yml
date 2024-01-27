@@ -1,0 +1,36 @@
+name: Deploy Documentation
+on:
+  push:
+    branches: ["main"]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build DocC
+        run: |
+          xcodebuild docbuild -scheme Toolbox \
+            -derivedDataPath /tmp/docbuild \
+            -destination 'generic/platform=iOS';
+          $(xcrun --find docc) process-archive \
+            transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/Toolbox.doccarchive \
+            --hosting-base-path Toolbox \
+            --output-path docs;
+        # echo "<script>window.location.href += \"/documentation/toolbox\"</script>" > docs/index.html;
+      - name: Upload archive
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "docs/*"
+          target: /var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
