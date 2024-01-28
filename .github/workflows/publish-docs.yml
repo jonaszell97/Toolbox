@@ -46,7 +46,7 @@ jobs:
         name: docs-archive
         path: ./
     - name: unzip artifact for deployment
-      run: unzip docs.zip
+      run: unzip docs.zip -d ./docs
     - name: Copy files
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -55,5 +55,5 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
-        source: "docs/*"
+        source: "./docs/*"
         target: /var/www/toolbox.jonaszell.dev/Toolbox.doccarchive
