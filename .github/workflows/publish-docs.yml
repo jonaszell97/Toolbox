@@ -31,7 +31,7 @@ jobs:
       #     mkdir -p docs
       #     echo "hello, world" > docs/index.txt
       - name: Zip artifact for deployment
-        run: zip docs.zip /tmp/docbuild/Build/Products/Debug-iphoneos/Toolbox.doccarchive/* -r
+        run: zip docs.zip docs/* -r
       - uses: actions/upload-artifact@master
         with:
           name: docs-archive
@@ -47,6 +47,8 @@ jobs:
         path: ./
     - name: unzip artifact for deployment
       run: unzip docs.zip -d ./docs
+    - name: Show files
+      run: ls -la ./docs
     - name: Copy files
       uses: appleboy/scp-action@v0.1.7
       with:
