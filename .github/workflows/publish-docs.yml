@@ -23,8 +23,8 @@ jobs:
             -destination 'generic/platform=iOS';
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/Toolbox.doccarchive \
-            --hosting-base-path Toolbox \
             --output-path docs;
+      # --hosting-base-path Toolbox \
       #  echo "<script>window.location.href += \"/documentation/toolbox\"</script>" > docs/index.html;
       # - name: Mock build
       #   run: |
