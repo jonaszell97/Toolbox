@@ -24,12 +24,6 @@ jobs:
           $(xcrun --find docc) process-archive \
             transform-for-static-hosting /tmp/docbuild/Build/Products/Debug-iphoneos/Toolbox.doccarchive \
             --output-path docs;
-      # --hosting-base-path Toolbox \
-      #  echo "<script>window.location.href += \"/documentation/toolbox\"</script>" > docs/index.html;
-      # - name: Mock build
-      #   run: |
-      #     mkdir -p docs
-      #     echo "hello, world" > docs/index.txt
       - name: Zip artifact for deployment
         run: zip docs.zip docs/* -r
       - uses: actions/upload-artifact@master
@@ -47,8 +41,6 @@ jobs:
         path: ./
     - name: unzip artifact for deployment
       run: unzip docs.zip -d ./docs
-    - name: Show files
-      run: ls -la ./docs
     - name: Copy files
       uses: appleboy/scp-action@v0.1.7
       with:

@@ -90,6 +90,7 @@ fileprivate struct DisjointSet {
     }
 }
 
+/// A connected component.
 public struct ConnectedComponent {
     /// The bounding box of the region.
     public let boundingBox: CGRect
@@ -103,6 +104,9 @@ public struct ConnectedComponent {
     }
     
     /// Whether this region contains a point.
+    /// 
+    /// - Parameter pt: The point to check.
+    /// - Returns: Whether the point is contained in this region.
     public func contains(_ pt: CGPoint) -> Bool {
         guard boundingBox.contains(pt) else {
             return false
@@ -112,6 +116,7 @@ public struct ConnectedComponent {
     }
 }
 
+/// Utility class for finding connected components in a binary image.
 public final class ConnectedComponents {
     public enum ConnectivityType {
         case fourWay
@@ -148,6 +153,8 @@ public final class ConnectedComponents {
     }
     
     /// Find the connected components.
+    /// 
+    /// - Returns: An array of connected components.
     public func findConnectedComponents() -> [ConnectedComponent] {
         self.firstPass()
         self.secondPass()
