@@ -18,8 +18,6 @@ public final class Log {
     internal static let toolbox = Logger(subsystem: "com.jonaszell.Toolbox", category: "Toolbox")
 }
 
-#if DEBUG
-
 public extension OSLog {
     func callAsFunction(_ type: OSLogType, _ s: String) {
         os_log("%{public}s", log: self, type: type, s)
@@ -118,19 +116,3 @@ extension DefaultStringInterpolation {
         self.appendInterpolation(argumentObject().description)
     }
 }
-
-#else
-
-extension Logger {
-    /// Discard a debug log.
-    func debug(_ message: String) {
-        
-    }
-    
-    /// Log a critical error that should be submitted as Analytics.
-    func critical(_ message: String) {
-        os_log("%{public}s", type: .fault, message)
-    }
-}
-
-#endif
