@@ -11,7 +11,10 @@ public final class Log {
     /// Custom closure that is used by `Toolbox` functions to report a critical error in an application.
     /// Users of this library can overwrite this property to customize the recovery of a critical error.
     public static var reportCriticalError: (String) -> Void = {
-        fatalError($0)
+        let msg = $0
+        Task { @MainActor in
+            fatalError(msg)
+        }
     }
     
     /// The logger used internally by Toolbox.
@@ -60,51 +63,67 @@ public struct Logger {
     }
     
     public func log(_ message: String) {
-        LogContainer.shared.logs.append(("Log", category, message, Date()))
-        logger(.default, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Log", category, message, Date()))
+            logger(.default, message)
+        }
     }
     
     public func debug(_ message: String) {
-        LogContainer.shared.logs.append(("Debug", category, message, Date()))
-        logger(.debug, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Debug", category, message, Date()))
+            logger(.debug, message)
+        }
     }
     
     public func info(_ message: String) {
-        LogContainer.shared.logs.append(("Info", category, message, Date()))
-        logger(.info, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Info", category, message, Date()))
+            logger(.info, message)
+        }
     }
     
     public func notice(_ message: String) {
-        LogContainer.shared.logs.append(("Notice", category, message, Date()))
-        logger(.default, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Notice", category, message, Date()))
+            logger(.default, message)
+        }
     }
     
     public func warning(_ message: String) {
-        LogContainer.shared.logs.append(("Warning", category, message, Date()))
-        logger(.default, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Warning", category, message, Date()))
+            logger(.default, message)
+        }
     }
     
     public func error(_ message: String) {
-        LogContainer.shared.logs.append(("Error", category, message, Date()))
-        logger(.error, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Error", category, message, Date()))
+            logger(.error, message)
+        }
     }
     
     public func critical(_ message: String) {
-        var message = message
-        message += """
+        Task { @MainActor in
+            var message = message
+            message += """
             \n------------------------------
             [Stack Trace]
             \(Thread.callStackSymbols.joined(separator: "\n"))
             ------------------------------
         """
-        
-        LogContainer.shared.logs.append(("Critical", category, message, Date()))
-        logger(.fault, message)
+            
+            LogContainer.shared.logs.append(("Critical", category, message, Date()))
+            logger(.fault, message)
+        }
     }
     
     public func temporary(_ message: String) {
-        LogContainer.shared.logs.append(("Debug", category, message, Date()))
-        logger(.debug, message)
+        Task { @MainActor in
+            LogContainer.shared.logs.append(("Debug", category, message, Date()))
+            logger(.debug, message)
+        }
     }
 }
 
